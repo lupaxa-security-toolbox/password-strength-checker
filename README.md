@@ -19,7 +19,7 @@ Python 3.11 or newer:
 pip install lupaxa-password-strength-checker
 ```
 
-The command is `password-strength-checker`. zxcvbn is the only dependency. The breach check uses the Python standard library.
+The command is `password-strength-checker`. The import path is `lupaxa.password_strength`. `lupaxa` is a namespace package — there is no `lupaxa/__init__.py`. zxcvbn is the only dependency. The breach check uses the Python standard library.
 
 ## Quick Start
 
