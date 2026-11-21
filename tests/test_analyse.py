@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import math
 from collections.abc import Sequence
 from dataclasses import replace
@@ -15,6 +14,7 @@ from lupaxa.password_strength.analyser import Policy, analyse
 from lupaxa.password_strength.banned import BannedList
 from lupaxa.password_strength.breach import BreachLookup
 from lupaxa.password_strength.card import MIN_INNER
+from lupaxa.password_strength.hashing import hibp_sha1
 
 
 class FakeClient:
@@ -290,7 +290,7 @@ def test_lookalikes_do_not_change_the_score() -> None:
 
 
 def test_banned_hit_forces_compromised_without_hiding_an_unscored_password(tmp_path: Path) -> None:
-    digest = hashlib.sha1(b"a" * 73, usedforsecurity=False).hexdigest()
+    digest = hibp_sha1("a" * 73)
     path = tmp_path / "banned.txt"
     _ = path.write_text(digest + "\n", encoding="utf-8")
     report = analyse("a" * 73, banned_hashes=BannedList.read(path))

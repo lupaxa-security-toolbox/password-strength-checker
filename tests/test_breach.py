@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import urllib.error
 import urllib.request
 from email.message import Message
@@ -11,6 +10,7 @@ from io import BytesIO
 import pytest
 
 from lupaxa.password_strength.breach import BreachClient, parse_range_body
+from lupaxa.password_strength.hashing import hibp_sha1
 
 
 class FakeResponse:
@@ -28,7 +28,7 @@ class FakeResponse:
 
 
 def _digest(password: str) -> tuple[str, str]:
-    digest = hashlib.sha1(password.encode("utf-8"), usedforsecurity=False).hexdigest().upper()
+    digest = hibp_sha1(password).upper()
     return digest[:5], digest[5:]
 
 

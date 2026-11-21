@@ -16,12 +16,12 @@ class _PolicyView(Protocol):
     @property
     def accepted(self) -> bool:
         """Whether the password met the policy."""
-        ...
+        raise NotImplementedError
 
     @property
     def failures(self) -> tuple[str, ...]:
         """Reasons the policy rejected the password."""
-        ...
+        raise NotImplementedError
 
 
 class _Report(Protocol):
@@ -30,102 +30,102 @@ class _Report(Protocol):
     @property
     def score(self) -> int | None:
         """Overall score from 0 to 100, or None when it was not scored."""
-        ...
+        raise NotImplementedError
 
     @property
     def rating(self) -> str:
         """Descriptive rating."""
-        ...
+        raise NotImplementedError
 
     @property
     def zxcvbn_score(self) -> int | None:
         """Unmodified zxcvbn score from 0 to 4."""
-        ...
+        raise NotImplementedError
 
     @property
     def length(self) -> int:
         """Number of characters."""
-        ...
+        raise NotImplementedError
 
     @property
     def character_counts(self) -> Mapping[str, int]:
         """Counts for each character class."""
-        ...
+        raise NotImplementedError
 
     @property
     def unique_characters(self) -> int:
         """Number of distinct characters."""
-        ...
+        raise NotImplementedError
 
     @property
     def classes_used(self) -> int:
         """Number of character classes present."""
-        ...
+        raise NotImplementedError
 
     @property
     def guesses(self) -> int | float | None:
         """Estimated guesses, or None when they were not estimated."""
-        ...
+        raise NotImplementedError
 
     @property
     def entropy_bits(self) -> float | None:
         """Log2 of the guess count."""
-        ...
+        raise NotImplementedError
 
     @property
     def crack_times_display(self) -> Mapping[str, str]:
         """Display strings for the four crack-time scenarios."""
-        ...
+        raise NotImplementedError
 
     @property
     def warning(self) -> str:
         """Zxcvbn warning, or an empty string."""
-        ...
+        raise NotImplementedError
 
     @property
     def suggestions(self) -> Sequence[str]:
         """Zxcvbn suggestions."""
-        ...
+        raise NotImplementedError
 
     @property
     def lookalikes(self) -> Sequence[Mapping[str, str]]:
         """Characters that resemble a different letter or digit."""
-        ...
+        raise NotImplementedError
 
     @property
     def estimate_note(self) -> str | None:
         """Why guesses were left empty, when they were."""
-        ...
+        raise NotImplementedError
 
     @property
     def breach_count(self) -> int | None:
         """Recorded breach occurrences."""
-        ...
+        raise NotImplementedError
 
     @property
     def breach_status(self) -> str:
         """Breach lookup status."""
-        ...
+        raise NotImplementedError
 
     @property
     def breach_error(self) -> str | None:
         """Why the breach lookup could not be trusted."""
-        ...
+        raise NotImplementedError
 
     @property
     def banned_status(self) -> str:
         """Banned-list lookup status."""
-        ...
+        raise NotImplementedError
 
     @property
     def banned_error(self) -> str | None:
         """Why the banned list could not be trusted."""
-        ...
+        raise NotImplementedError
 
     @property
     def policy(self) -> _PolicyView | None:
         """Policy result, or None when no policy was set."""
-        ...
+        raise NotImplementedError
 
 
 MIN_INNER = 62

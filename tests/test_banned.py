@@ -2,19 +2,15 @@
 
 from __future__ import annotations
 
-import hashlib
 from pathlib import Path
 
 from lupaxa.password_strength.banned import BannedList
-
-
-def _sha1(password: str) -> str:
-    return hashlib.sha1(password.encode("utf-8"), usedforsecurity=False).hexdigest()
+from lupaxa.password_strength.hashing import hibp_sha1
 
 
 def test_hit_miss_and_hibp_style_line(tmp_path: Path) -> None:
     path = tmp_path / "banned.txt"
-    _ = path.write_text(f"# comment\n\n{_sha1('secret').upper()}:4\n", encoding="utf-8")
+    _ = path.write_text(f"# comment\n\n{hibp_sha1('secret').upper()}:4\n", encoding="utf-8")
     banned = BannedList.read(path)
 
     assert banned.lookup("secret").found is True

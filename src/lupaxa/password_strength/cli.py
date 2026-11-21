@@ -29,11 +29,11 @@ class _LineStream(Protocol):
 
     def isatty(self) -> bool:
         """Return whether the stream is a terminal."""
-        ...
+        raise NotImplementedError
 
     def readline(self) -> str:
         """Return the next line, including its newline when one was present."""
-        ...
+        raise NotImplementedError
 
 
 class _Args(argparse.Namespace):

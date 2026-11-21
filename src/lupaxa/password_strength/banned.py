@@ -6,10 +6,11 @@ unknown. It is never treated as a clean result.
 
 from __future__ import annotations
 
-import hashlib
 import re
 from dataclasses import dataclass
 from pathlib import Path
+
+from lupaxa.password_strength.hashing import hibp_sha1
 
 _HASH_LINE = re.compile(r"^([0-9a-fA-F]{40})(?::[0-9]+)?$")
 
@@ -93,7 +94,7 @@ class BannedList:
         """
         if self.status != "ready":
             return BannedLookup(status=self.status, error=self.error)
-        digest = hashlib.sha1(password.encode("utf-8"), usedforsecurity=False).hexdigest().lower()
+        digest = hibp_sha1(password)
         if digest in self.hashes:
             return BannedLookup(status="breached")
         return BannedLookup(status="not_found")

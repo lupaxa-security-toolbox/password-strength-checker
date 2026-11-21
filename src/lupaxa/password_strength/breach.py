@@ -6,13 +6,14 @@ response is never reported as "not found".
 
 from __future__ import annotations
 
-import hashlib
 import re
 import urllib.error
 import urllib.request
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Protocol, cast
+
+from lupaxa.password_strength.hashing import hibp_sha1
 
 HIBP_URL = "https://api.pwnedpasswords.com/range/{}"
 USER_AGENT = "password-strength-checker"
@@ -25,15 +26,15 @@ class RangeResponse(Protocol):
 
     def read(self) -> bytes:
         """Return the raw response body."""
-        ...
+        raise NotImplementedError
 
     def __enter__(self) -> RangeResponse:
         """Enter the response context."""
-        ...
+        raise NotImplementedError
 
     def __exit__(self, exc_type: object, exc: object, traceback: object) -> object:
         """Leave the response context."""
-        ...
+        raise NotImplementedError
 
 
 Opener = Callable[[urllib.request.Request, float], RangeResponse]
@@ -74,7 +75,7 @@ class PasswordChecker(Protocol):
 
     def lookup(self, password: str) -> BreachLookup:
         """Return the lookup for one password."""
-        ...
+        raise NotImplementedError
 
 
 def parse_range_body(body: str, suffix: str) -> BreachLookup:
@@ -141,7 +142,7 @@ class BreachClient:
         BreachLookup
             Breach count, or a distinct failure status when the response cannot be trusted.
         """
-        digest = hashlib.sha1(password.encode("utf-8"), usedforsecurity=False).hexdigest().upper()
+        digest = hibp_sha1(password).upper()
         prefix, suffix = digest[:5], digest[5:]
         if _PREFIX.fullmatch(prefix) is None:
             return BreachLookup(status="invalid_response", error="Could not hash the password.")
