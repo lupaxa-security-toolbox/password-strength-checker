@@ -61,10 +61,7 @@ def test_hidden_prompt_and_piped_stdin() -> None:
         _ = read_password(input_stream=Stream("", tty=True), prompt=closed)
 
 
-def test_empty_password_prints_a_report(
-    monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
-) -> None:
+def test_empty_password_prints_a_report(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.setattr("lupaxa.password_strength.cli.read_password", lambda: "")
     assert main([]) == 0
     output = capsys.readouterr().out
@@ -85,10 +82,7 @@ def test_version_flag(capsys: pytest.CaptureFixture[str]) -> None:
     assert capsys.readouterr().out.strip() == get_version()
 
 
-def test_timeout_is_rejected_before_prompting(
-    monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
-) -> None:
+def test_timeout_is_rejected_before_prompting(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     def fail() -> str:
         raise AssertionError("password prompt")
 
@@ -107,11 +101,7 @@ def test_json_report_has_no_password_field(monkeypatch: pytest.MonkeyPatch, caps
     assert payload["breached"] is None
 
 
-def test_policy_exit_status_is_separate_from_failure(
-    monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
-    tmp_path: Path,
-) -> None:
+def test_policy_exit_status_is_separate_from_failure(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], tmp_path: Path) -> None:
     monkeypatch.setattr("lupaxa.password_strength.cli.read_password", lambda: "password")
 
     def fail() -> str:
@@ -141,10 +131,7 @@ def test_policy_exit_status_is_separate_from_failure(
     assert "banned list could not be checked" in failures
 
 
-def test_breach_error_is_reported_as_unknown(
-    monkeypatch: pytest.MonkeyPatch,
-    capsys: pytest.CaptureFixture[str],
-) -> None:
+def test_breach_error_is_reported_as_unknown(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.setattr("lupaxa.password_strength.cli.read_password", lambda: "secret")
 
     class FakeClient:

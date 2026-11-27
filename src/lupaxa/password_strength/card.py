@@ -134,20 +134,8 @@ _LABEL_WIDTH = 24
 _PAIR_VALUE_WIDTH = 6
 _SECOND_LABEL_WIDTH = 19
 
-_COUNTS = (
-    ("lowercase", "Lowercase"),
-    ("uppercase", "Uppercase"),
-    ("digits", "Digits"),
-    ("symbols", "Symbols"),
-    ("spaces", "Spaces"),
-    ("other_unicode", "Other Unicode"),
-)
-_CRACKS = (
-    ("online_throttled", "Online (Throttled)"),
-    ("online_unthrottled", "Online (Unthrottled)"),
-    ("offline_slow_hash", "Offline (Slow Hash)"),
-    ("offline_fast_hash", "Offline (Fast Hash)"),
-)
+_COUNTS = (("lowercase", "Lowercase"), ("uppercase", "Uppercase"), ("digits", "Digits"), ("symbols", "Symbols"), ("spaces", "Spaces"), ("other_unicode", "Other Unicode"))
+_CRACKS = (("online_throttled", "Online (Throttled)"), ("online_unthrottled", "Online (Unthrottled)"), ("offline_slow_hash", "Offline (Slow Hash)"), ("offline_fast_hash", "Offline (Fast Hash)"))
 _RATING_COLOUR = {
     "Compromised": "31",
     "Very weak": "31",
@@ -428,27 +416,12 @@ def _colourise(lines: list[str], report: _Report) -> list[str]:
     painted: list[str] = []
     warning_follows = False
     for line in lines:
-        spans, warning_follows = _line_spans(
-            line,
-            report,
-            rating=rating,
-            meter=meter,
-            score=score,
-            warning_follows=warning_follows,
-        )
+        spans, warning_follows = _line_spans(line, report, rating=rating, meter=meter, score=score, warning_follows=warning_follows)
         painted.append(_paint_spans(line, spans))
     return painted
 
 
-def _line_spans(
-    line: str,
-    report: _Report,
-    *,
-    rating: str,
-    meter: str,
-    score: str | None,
-    warning_follows: bool,
-) -> tuple[list[tuple[int, int, str]], bool]:
+def _line_spans(line: str, report: _Report, *, rating: str, meter: str, score: str | None, warning_follows: bool) -> tuple[list[tuple[int, int, str]], bool]:
     if line.startswith(("╭", "╰")):
         return [(0, len(line), "2;90")], False
     if line.startswith("├"):

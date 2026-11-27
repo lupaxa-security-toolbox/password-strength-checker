@@ -4,14 +4,7 @@ from __future__ import annotations
 
 import string
 
-CHARACTER_CLASSES = (
-    "lowercase",
-    "uppercase",
-    "digits",
-    "symbols",
-    "spaces",
-    "other_unicode",
-)
+CHARACTER_CLASSES = ("lowercase", "uppercase", "digits", "symbols", "spaces", "other_unicode")
 
 
 def character_counts(password: str) -> dict[str, int]:

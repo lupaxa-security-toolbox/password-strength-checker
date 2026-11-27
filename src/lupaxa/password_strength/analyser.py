@@ -181,12 +181,7 @@ class Analysis:
 
 
 def analyse(
-    password: str,
-    *,
-    user_inputs: Sequence[str] | None = None,
-    breach_client: PasswordChecker | None = None,
-    banned_hashes: BannedList | None = None,
-    policy: Policy | None = None,
+    password: str, *, user_inputs: Sequence[str] | None = None, breach_client: PasswordChecker | None = None, banned_hashes: BannedList | None = None, policy: Policy | None = None
 ) -> Analysis:
     """Score a password and optionally check breaches, a banned list, and a policy.
 
@@ -283,13 +278,7 @@ def _zxcvbn_result(password: str, words: list[str]) -> tuple[bool, dict[str, obj
     return True, _mapping(zxcvbn(password, user_inputs=words))
 
 
-def _apply_policy(
-    policy: Policy | None,
-    *,
-    score: int | None,
-    breach_status: str,
-    banned_status: str,
-) -> PolicyResult | None:
+def _apply_policy(policy: Policy | None, *, score: int | None, breach_status: str, banned_status: str) -> PolicyResult | None:
     if policy is None:
         return None
     failures: list[str] = []

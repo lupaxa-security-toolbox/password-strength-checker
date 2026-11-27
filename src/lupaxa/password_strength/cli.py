@@ -52,54 +52,19 @@ class _Args(argparse.Namespace):
 
 def build_parser() -> argparse.ArgumentParser:
     """Return the command-line parser."""
-    parser = argparse.ArgumentParser(
-        prog="password-strength-checker",
-        description="Score a password and optionally check Have I Been Pwned.",
-    )
-    _ = parser.add_argument(
-        "--check-breach",
-        action="store_true",
-        help="Check Have I Been Pwned using k-anonymity. Off by default.",
-    )
+    parser = argparse.ArgumentParser(prog="password-strength-checker", description="Score a password and optionally check Have I Been Pwned.")
+    _ = parser.add_argument("--check-breach", action="store_true", help="Check Have I Been Pwned using k-anonymity. Off by default.")
     _ = parser.add_argument("--json", action="store_true", help="Print a JSON report.")
-    _ = parser.add_argument(
-        "--user-input",
-        action="append",
-        default=[],
-        metavar="WORD",
-        help="Word zxcvbn should treat as predictable. Repeat to add more than one.",
-    )
-    _ = parser.add_argument(
-        "--timeout",
-        type=float,
-        default=10.0,
-        help="Seconds to wait for Have I Been Pwned. Default: 10.",
-    )
-    _ = parser.add_argument(
-        "--min-score",
-        type=int,
-        help="Reject a password whose overall score is below this, from 0 to 100.",
-    )
-    _ = parser.add_argument(
-        "--reject-breached",
-        action="store_true",
-        help="Reject a breach or banned-list hit. An incomplete check is rejected too.",
-    )
-    _ = parser.add_argument(
-        "--banned-hashes",
-        type=Path,
-        metavar="FILE",
-        help="File of SHA-1 hashes, one per line. A hit marks the password compromised.",
-    )
+    _ = parser.add_argument("--user-input", action="append", default=[], metavar="WORD", help="Word zxcvbn should treat as predictable. Repeat to add more than one.")
+    _ = parser.add_argument("--timeout", type=float, default=10.0, help="Seconds to wait for Have I Been Pwned. Default: 10.")
+    _ = parser.add_argument("--min-score", type=int, help="Reject a password whose overall score is below this, from 0 to 100.")
+    _ = parser.add_argument("--reject-breached", action="store_true", help="Reject a breach or banned-list hit. An incomplete check is rejected too.")
+    _ = parser.add_argument("--banned-hashes", type=Path, metavar="FILE", help="File of SHA-1 hashes, one per line. A hit marks the password compromised.")
     _ = parser.add_argument("--version", action="version", version=__version__)
     return parser
 
 
-def read_password(
-    *,
-    input_stream: _LineStream | None = None,
-    prompt: Callable[[str], str] = getpass.getpass,
-) -> str:
+def read_password(*, input_stream: _LineStream | None = None, prompt: Callable[[str], str] = getpass.getpass) -> str:
     """Read a password without accepting it on the command line.
 
     Parameters
@@ -170,13 +135,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.min_score is not None or args.reject_breached:
         policy = Policy(min_score=args.min_score, reject_breached=args.reject_breached)
     try:
-        report = analyse(
-            password,
-            user_inputs=args.user_input,
-            breach_client=client,
-            banned_hashes=banned,
-            policy=policy,
-        )
+        report = analyse(password, user_inputs=args.user_input, breach_client=client, banned_hashes=banned, policy=policy)
     except (OSError, TypeError, ValueError):
         print("Password analysis failed.", file=sys.stderr)
         return 1

@@ -57,13 +57,7 @@ def _zxcvbn_result(score: int = 3, guesses: float = 1_000_000.0) -> dict[str, ob
     }
 
 
-def _fake_zxcvbn(
-    password: str,
-    user_inputs: list[str] | None = None,
-    *,
-    score: int = 3,
-    guesses: float = 1_000_000.0,
-) -> dict[str, object]:
+def _fake_zxcvbn(password: str, user_inputs: list[str] | None = None, *, score: int = 3, guesses: float = 1_000_000.0) -> dict[str, object]:
     del password, user_inputs
     return _zxcvbn_result(score=score, guesses=guesses)
 
@@ -320,22 +314,14 @@ def test_policy_rejects_a_low_score_and_an_unknown_breach() -> None:
     assert weak.policy.failures == (f"score {weak.score} is below 75",)
     assert "Rejected" in weak.to_text()
 
-    unknown = analyse(
-        "example",
-        breach_client=FakeClient(BreachLookup(status="network_error", error="The HIBP request failed.")),
-        policy=Policy(min_score=0, reject_breached=True),
-    )
+    unknown = analyse("example", breach_client=FakeClient(BreachLookup(status="network_error", error="The HIBP request failed.")), policy=Policy(min_score=0, reject_breached=True))
     assert unknown.policy is not None
     assert unknown.policy.accepted is False
     assert unknown.policy.failures == ("breach check did not complete",)
     assert unknown.breached is None
     assert unknown.score == (unknown.zxcvbn_score or 0) * 25
 
-    missed = analyse(
-        "example",
-        breach_client=FakeClient(BreachLookup(status="not_found", count=0)),
-        policy=Policy(reject_breached=True),
-    )
+    missed = analyse("example", breach_client=FakeClient(BreachLookup(status="not_found", count=0)), policy=Policy(reject_breached=True))
     assert missed.policy is not None
     assert missed.policy.accepted is True
     assert missed.policy.failures == ()
